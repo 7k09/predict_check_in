@@ -25,7 +25,7 @@ def train_save_all_models(train_grids_path,test_grids_path,start, path ='/Users/
     if not os.path.exists(path):
         os.makedirs(path)
     for (train_grid_path,test_grid_path) in zip(train_grids_path,test_grids_path):
-        train_grid_name = train_grid_path.split('/')[6].split('.')[0]
+        train_grid_name = train_grid_path.split('.')[0].split('/')[-1]
 
         if train_grid_name>= start:
             print train_grid_name
