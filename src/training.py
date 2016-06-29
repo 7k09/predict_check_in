@@ -23,7 +23,7 @@ def save_model_result(row_ids, y_pred_class, y_preds, weights, name):
     for (row_id, y_pred, w) in zip(row_ids, y_preds, weights):
         curr_dict = {}
         for place, prob in zip(y_pred_class, y_pred):
-            if prob > 0:
+            if prob * w > 0.1:
                 curr_dict[place] = prob * w
         output_dict[row_id] = curr_dict
 
@@ -41,6 +41,8 @@ def train_save_all_models(train_grids_path,test_grids_path, path, start=''):
     return
     
 def train_save_model(train_grid_path, test_grid_path, path, start=''):
+    if not os.path.exists(path):
+        os.makedirs(path)
     train_grid_name = train_grid_path.split('.')[0].split('/')[-1]
     if train_grid_name <= start:
         return
@@ -56,7 +58,7 @@ def train_save_model(train_grid_path, test_grid_path, path, start=''):
     y_train = train_grid.place_id
     X_test =test_grid[X_names]
     #train model and output probabilities
-    train_model = RandomForestClassifier(n_estimators=500, random_state=10).fit(X_train,y_train,X_train.weight.values)
+    train_model = RandomForestClassifier(n_estimators=250, random_state=2).fit(X_train,y_train,X_train.weight.values)
     y_preds, i = [], 0
     block_size = 8000
     while i < len(X_test):

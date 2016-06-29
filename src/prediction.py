@@ -26,6 +26,7 @@ def add_dicts(full_dict, curr_dict):
 def load_results(output_paths):
     full_dict = {}
     for file_name in output_paths:
+        print file_name
         with open(file_name, 'r') as fid:
             curr_dict = json.load(fid)
         add_dicts(full_dict, curr_dict)
@@ -34,14 +35,16 @@ def load_results(output_paths):
 
 
 def predict(test_df, output_paths):
-    count = 0
     full_dict = load_results(output_paths)
     output = []
     for row_id in test_df.row_id.values:
+        if int(row_id) % 1000 == 0:
+            print row_id
         row_id_str = unicode(row_id, "utf-8")
         if not full_dict.has_key(row_id_str):
             print 'no records: ' + row_id_str
             output.append('')
+            continue
         sorted_probs = sorted(full_dict[row_id_str].items(), key=operator.itemgetter(1), reverse=True)
         string = ''
         for i in range(min(len(sorted_probs), 3)):
