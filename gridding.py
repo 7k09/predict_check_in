@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from patsy import dmatrices
+from math import ceil, floor
 
 
 """
@@ -10,12 +9,11 @@ a cell is represented by the index of its top-left corner
 X, Y -- array of cells
 weights -- array of weights computed by the portion of intersection in the error box
 """
-from math import ceil, floor
 def record_cell_intersection(record, grid_size):
     X, Y, weights = [], [], []
-    err = float(record.accuracy) / 1000 # location error
-    x_l, x_u = max(1e-8, float(record.x) - err), min(10-1e-8, float(record.x) + err) # end points of error box in x
-    y_l, y_u = max(1e-8, float(record.y) - err), min(10-1e-8, float(record.y) + err) # end points of error box in y
+    err = record.accuracy / 1000 # location error
+    x_l, x_u = max(1e-8, record.x - err), min(10-1e-8, record.x + err) 
+    y_l, y_u = max(1e-8, record.y - err), min(10-1e-8, record.y + err)
     for x in range(int(floor(x_l/grid_size)), int(ceil(x_u/grid_size))):
         for y in range(int(floor(y_l/grid_size)), int(ceil(y_u/grid_size))):
             X.append(x)
