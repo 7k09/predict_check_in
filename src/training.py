@@ -1,5 +1,8 @@
+
+
 import json
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 import pandas as pd
 import os
 import numpy as np
@@ -58,7 +61,7 @@ def train_save_model(train_grid_path, test_grid_path, path, start=''):
     y_train = train_grid.place_id
     X_test =test_grid[X_names]
     #train model and output probabilities
-    train_model = RandomForestClassifier(n_estimators=250, random_state=2).fit(X_train,y_train,X_train.weight.values)
+    train_model = LinearRegression().fit(X_train,y_train,X_train.weight.values)
     y_preds, i = [], 0
     block_size = 8000
     while i < len(X_test):
@@ -71,3 +74,4 @@ def train_save_model(train_grid_path, test_grid_path, path, start=''):
     
 def train_save_model_wrapper(args):
     train_save_model(*args)
+
